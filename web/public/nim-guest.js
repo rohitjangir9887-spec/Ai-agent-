@@ -4,6 +4,7 @@
  */
 (function () {
   "use strict";
+  function boot() {
   const el = document.getElementById("root");
   if (!el) return;
   document.title = "nanoMuse · NVIDIA NIM Chat";
@@ -155,4 +156,10 @@
   });
   welcome();
   showKey();
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
 })();
