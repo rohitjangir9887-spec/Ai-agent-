@@ -114,6 +114,10 @@ def serve(
     service = MuseService(settings)
     service.bridge.base_url = bridge_url(host, port)
     app = create_app(settings, service)
+    # An anonymous, BYOK chat surface; agent tools and storage still use bearer auth.
+    from nanomuse.server.guest_nim import install_guest_nim
+
+    install_guest_nim(app)
 
     shown_host = host
     if host in ("0.0.0.0", "::", ""):

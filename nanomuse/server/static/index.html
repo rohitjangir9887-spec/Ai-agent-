@@ -25,14 +25,54 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <title>nanoMuse</title>
-    <script type="module" crossorigin src="/assets/index-B_XKy68T.js"></script>
+    <script>
+      (function() {
+        // A private pairing link opens the original nanoMuse. Ordinary visitors
+        // see the login-free NVIDIA BYOK chat, with no access to agent tools.
+        var paired = false;
+        try { paired = !!localStorage.getItem("nanomuse_token"); } catch (e) {}
+        var link = /(?:^|&)token=/.test(location.hash.slice(1));
+        var script = document.createElement("script");
+        if (paired || link) {
+          script.type = "module";
+          script.src = "/assets/index-B_XKy68T.js";
+          script.crossOrigin = "anonymous";
+        } else {
+          script.src = "/nim-guest.js";
+          script.defer = true;
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", function() {
+            document.body.appendChild(script);
+          }, { once: true });
+        } else {
+          document.body.appendChild(script);
+        }
+        if (paired && !link) {
+          // A stale or revoked token returns to the public NIM chat instead
+          // of showing the old full-screen "Access token" prompt.
+          addEventListener("DOMContentLoaded", function() {
+            var root = document.getElementById("root");
+            var obs = new MutationObserver(function() {
+              if (root && root.textContent.includes("Connect to your nanoMuse")) {
+                obs.disconnect();
+                try { localStorage.removeItem("nanomuse_token"); } catch(e) {}
+                location.reload();
+              }
+            });
+            if (root) obs.observe(root, { childList: true, subtree: true, characterData: true });
+            setTimeout(function() { obs.disconnect(); }, 25000);
+          }, { once: true });
+        }
+      })();
+    </script>
     <link rel="modulepreload" crossorigin href="/assets/MuseHeader-COiKwhvK.js">
     <link rel="modulepreload" crossorigin href="/assets/external-link-DVmbfl4M.js">
     <link rel="modulepreload" crossorigin href="/assets/Form-CuJcIHBk.js">
     <link rel="modulepreload" crossorigin href="/assets/StarNudge-BM33vp4C.js">
     <link rel="modulepreload" crossorigin href="/assets/refresh-cw-9L9aCCyC.js">
     <link rel="stylesheet" crossorigin href="/assets/index-cfcM1xi3.css">
-      <script defer src="/nim-setup.js"></script>
+      
   </head>
   <body>
     <div id="root"></div>
