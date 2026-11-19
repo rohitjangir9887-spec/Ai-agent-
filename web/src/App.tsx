@@ -1,5 +1,5 @@
 import { LayoutGrid, Lightbulb, Loader2, MessageCircle, Newspaper, SquareCheckBig, WifiOff } from "lucide-react";
-import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 import { api, setToken } from "./api";
 import { BrandMark } from "./components/BrandMark";
 import { DesktopRemoteHint } from "./components/DesktopRemoteHint";
@@ -236,37 +236,12 @@ function Connecting({ error }: { error: string | null }) {
   );
 }
 
+// A missing/expired private pairing automatically returns to the public
+// NVIDIA BYOK chat. The old full-screen Access Token form is intentionally gone.
 function TokenGate() {
-  const [value, setValue] = useState("");
-  const t = useT();
-  return (
-    <div className="mx-auto flex h-[100dvh] max-w-md flex-col items-center justify-center px-6 text-center">
-      <BrandMark size={88} />
-      <h1 className="mt-4 text-[22px] font-bold">{t("Connect to your nanoMuse")}</h1>
-      <p className="mt-2 text-[14px] text-muted">
-        {t("This app talks to the nanoMuse server you run yourself. Scan the QR code printed by")}{" "}
-        <code className="rounded bg-surface-2 px-1">nanomuse serve</code>{t(", or paste the access token below.")}
-      </p>
-      <form
-        className="mt-5 w-full flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!value.trim()) return;
-          setToken(value.trim());
-          window.location.reload();
-        }}
-      >
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          aria-label={t("Access token")}
-          placeholder={t("Access token")}
-          className="flex-1 rounded-2xl bg-surface-2 px-4 py-2.5 text-[15px] outline-none focus:ring-2 focus:ring-accent/40"
-        />
-        <button type="submit" className="rounded-2xl bg-accent text-accent-fg px-4 font-medium">
-          {t("Connect")}
-        </button>
-      </form>
-    </div>
-  );
+  useEffect(() => {
+    setToken("");
+    window.location.replace(window.location.pathname + window.location.search);
+  }, []);
+  return <Connecting error={null} />;
 }
