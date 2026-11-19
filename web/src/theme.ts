@@ -1,6 +1,6 @@
 /**
- * Light or dark — a device setting like the locale. Light is the default whatever the
- * system prefers; dark only when chosen here (or "system" to follow it). index.html applies
+ * Light or dark — a device setting like the locale. Dark is the default whatever the
+ * system prefers; light only when chosen here (or "system" to follow it). index.html applies
  * the stored choice before the first paint; this module keeps <html data-theme> and the
  * theme-color meta in step afterwards.
  */
@@ -17,9 +17,9 @@ function load(): ThemeSetting {
     const v = localStorage.getItem(STORAGE_KEY);
     if (v === "light" || v === "dark" || v === "system") return v;
   } catch {
-    // no storage: light
+    // no storage: dark
   }
-  return "light";
+  return "dark";
 }
 
 let setting: ThemeSetting = load();
