@@ -6,12 +6,12 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
     />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#181819" />
     <script>
-      // light unless dark was chosen under Settings → Appearance (or "system"): applied
-      // before the first paint so a dark choice does not flash white
+      // dark by default, while respecting a saved appearance preference: applied
+      // before the first paint so the dark UI never flashes white
       try {
-        var t = localStorage.getItem("nanomuse_theme") || "light";
+        var t = localStorage.getItem("nanomuse_theme") || "dark";
         if (t === "system") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         document.documentElement.dataset.theme = t;
         if (t === "dark") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#181819");
@@ -32,6 +32,7 @@
     <link rel="modulepreload" crossorigin href="/assets/StarNudge-BM33vp4C.js">
     <link rel="modulepreload" crossorigin href="/assets/refresh-cw-9L9aCCyC.js">
     <link rel="stylesheet" crossorigin href="/assets/index-cfcM1xi3.css">
+      <script defer src="/nim-setup.js"></script>
   </head>
   <body>
     <div id="root"></div>

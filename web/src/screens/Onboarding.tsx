@@ -216,7 +216,7 @@ export function Onboarding() {
                     <ChevronRight size={16} className="shrink-0 text-muted" />
                   </button>
                 )}
-                {!modelReady && !state.hub?.account.signed_in && (
+                {!modelReady && !state.hub?.account.signed_in && state.hub?.account.required && (
                   <div className="rounded-3xl border border-border/70 bg-surface p-4">
                     <SignIn onSignedIn={() => void loadConn()} useAsModel />
                   </div>
