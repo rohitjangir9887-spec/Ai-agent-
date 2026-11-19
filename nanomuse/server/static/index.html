@@ -41,7 +41,13 @@
           script.src = "/nim-guest.js";
           script.defer = true;
         }
-        document.head.appendChild(script);
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", function() {
+            document.body.appendChild(script);
+          }, { once: true });
+        } else {
+          document.body.appendChild(script);
+        }
         if (paired && !link) {
           // A stale or revoked token returns to the public NIM chat instead
           // of showing the old full-screen "Access token" prompt.
